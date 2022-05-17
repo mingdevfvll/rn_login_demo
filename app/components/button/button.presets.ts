@@ -16,6 +16,7 @@ const BASE_TEXT: TextStyle = {
   fontSize: 16,
   lineHeight: 18,
   textAlign: "center",
+  fontFamily: 'ProximaNovaA-Bold'
 }
 
 /**

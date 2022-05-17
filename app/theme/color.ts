@@ -29,24 +29,13 @@ export const color = {
    */
   primary: palette.oranish,
   secondary: palette.maize,
-  /**
-   * The main tinting color, but darker.
-   */
-  primaryDarker: palette.orangeDarker,
-  /**
-   * A subtle color used for borders and lines.
-   */
-  line: palette.offWhite,
+
   /**
    * The default color of text in many components.
    */
   text: palette.white,
   /**
-   * Secondary information.
-   */
-  dim: palette.lightGrey,
-  /**
    * Error messages and icons.
    */
-  error: palette.angry,
+  error: palette.tomato,
 }

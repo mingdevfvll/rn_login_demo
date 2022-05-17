@@ -15,7 +15,12 @@ const ROOT: ViewStyle = {
   justifyContent: "flex-start",
   position: "relative",
 }
-const TITLE: TextStyle = { fontSize: 20, lineHeight: 22, textAlign: "center" }
+const TITLE: TextStyle = {
+  fontSize: 20,
+  lineHeight: 22,
+  fontFamily: "ProximaNovaA-Bold",
+  textAlign: "center",
+}
 const TITLE_MIDDLE: ViewStyle = { flex: 1, justifyContent: "center" }
 const LEFT_BUTTON: ViewStyle = { position: "absolute", left: spacing[4], zIndex: 1 }
 const LEFT_ICON: ImageStyle = { width: 41, height: 41 }

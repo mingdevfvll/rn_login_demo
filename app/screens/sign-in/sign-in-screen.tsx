@@ -1,16 +1,72 @@
-import React, { FC, useCallback } from "react"
-import { View, ViewStyle } from "react-native"
+import React, { FC, useCallback, useEffect, useRef, useState } from "react"
+import { TextInput, View, ViewStyle } from "react-native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { Button, GradientBackground, Header, Screen, TextField } from "../../components"
+import { ApolloError, useMutation } from "@apollo/client"
+
+import { LOGIN_MUTATION } from "../../graphql/user"
 import { color, spacing } from "../../theme"
 import { NavigatorParamList } from "../../navigators"
+import { FormState, LogInResponse } from "../../types"
+import { validateEmail } from "../../utils/validateEmail"
+import { cacheToStorage, useSignedIn } from "../../state/user/hooks"
+
+// Components
+import {
+  Button,
+  ErrorMessage,
+  GradientBackground,
+  Header,
+  Screen,
+  TextField,
+} from "../../components"
 
 export const SignInScreen: FC<NativeStackScreenProps<NavigatorParamList, "signin">> = ({
   navigation,
 }) => {
-  const onHeaderLeftPress = useCallback(() => {
-    navigation.goBack()
+  const emailInputRef = useRef<TextInput>(null)
+  const { setIsSignedIn } = useSignedIn()
+  const [formState, setFormState] = useState<FormState>({
+    email: "",
+    password: "",
+  })
+  const [invalidCredentials, setInvalidCredentials] = useState<boolean>(false)
+  const { email, password } = formState
+  const invalidEmail = email.trim() ? !validateEmail(email) : false
+  const isDisabledLogIn = !email.trim() || !password.trim() || invalidEmail
+  const errorMsg = invalidEmail
+    ? "Invalid email"
+    : invalidCredentials
+    ? "Email or password is not correct"
+    : ""
+
+  const [logInWithEmail, { loading }] = useMutation(LOGIN_MUTATION, {
+    onCompleted: async (res: LogInResponse) => {
+      const {
+        loginWithEmail: { accessToken, refreshToken, user },
+      } = res
+
+      await cacheToStorage(accessToken, refreshToken, user)
+      setIsSignedIn(true)
+      navigation.navigate("profile")
+    },
+    onError: (error: ApolloError) => {
+      if (error.message === "Invalid credentials") {
+        setInvalidCredentials(true)
+      }
+    },
+  })
+
+  useEffect(() => {
+    emailInputRef.current.focus()
   }, [])
+
+  const onHeaderLeftPress = useCallback(() => {
+    navigation.navigate("welcome")
+  }, [])
+
+  const onLogIn = useCallback(() => {
+    logInWithEmail({ variables: { email, password } })
+  }, [email, password])
 
   return (
     <View style={FULL}>
@@ -19,11 +75,48 @@ export const SignInScreen: FC<NativeStackScreenProps<NavigatorParamList, "signin
       <Screen style={CONTAINER} backgroundColor={color.transparent}>
         <Header headerText="Log in" onLeftPress={onHeaderLeftPress} />
         <View style={FORM_CONTENT}>
-          <TextField label="Email" />
-          <TextField label="Password" />
+          <TextField
+            forwardedRef={emailInputRef}
+            value={email}
+            label="Email"
+            onChangeText={(text: string) => {
+              invalidCredentials && setInvalidCredentials(false)
+              setFormState({
+                ...formState,
+                email: text,
+              })
+            }}
+          />
+          <TextField
+            secureTextEntry
+            value={password}
+            label="Password"
+            onChangeText={(text: string) => {
+              invalidCredentials && setInvalidCredentials(false)
+              setFormState({
+                ...formState,
+                password: text,
+              })
+            }}
+          />
+
+          {(invalidEmail || invalidCredentials) && (
+            <View style={ERROR_WRAP}>
+              <ErrorMessage msg={errorMsg} />
+            </View>
+          )}
 
           <View style={BUTTON_WRAP}>
-            <Button style={BUTTON} preset="green" text="LOG IN" />
+            <Button
+              loading={loading}
+              disabled={isDisabledLogIn}
+              style={BUTTON}
+              preset="green"
+              text="LOG IN"
+              onPress={onLogIn}
+            />
+
+            <Button style={FORGOT_BUTTON} preset="link" text="Forgot my password" />
           </View>
         </View>
       </Screen>
@@ -32,20 +125,34 @@ export const SignInScreen: FC<NativeStackScreenProps<NavigatorParamList, "signin
 }
 
 const FULL: ViewStyle = { flex: 1 }
+
 const CONTAINER: ViewStyle = {
   backgroundColor: color.transparent,
   alignItems: "center",
 }
+
 const FORM_CONTENT: ViewStyle = {
   paddingHorizontal: 38,
   marginTop: spacing[4],
   flex: 1,
   width: "100%",
 }
+
+const ERROR_WRAP: ViewStyle = {
+  marginTop: spacing[4],
+  alignItems: "center",
+  justifyContent: "center",
+}
+
 const BUTTON_WRAP: ViewStyle = {
   alignItems: "center",
 }
+
+const FORGOT_BUTTON: ViewStyle = {
+  marginTop: spacing[5],
+}
+
 const BUTTON: ViewStyle = {
   width: 150,
-  marginTop: 26,
+  marginTop: spacing[5],
 }
