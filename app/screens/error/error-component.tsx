@@ -14,7 +14,7 @@ const CONTAINER: ViewStyle = {
 const ERROR_DETAILS_CONTAINER: ViewStyle = {
   width: "100%",
   maxHeight: "60%",
-  backgroundColor: color.line,
+  backgroundColor: color.palette.greyishBrown,
   marginVertical: 15,
   paddingHorizontal: 10,
   paddingBottom: 15,
@@ -34,7 +34,7 @@ const TITLE_ERROR: TextStyle = {
 }
 
 const FRIENDLY_SUBTITLE: TextStyle = {
-  color: color.palette.black,
+  color: color.palette.greyishBrown,
   fontWeight: "normal",
   paddingVertical: 15,
 }
