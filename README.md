@@ -27,5 +27,6 @@ yarn install
 cd ios && pod install
 ```
 ### B - RUN SOURCE
-
+```bash
 yarn ios
+```
