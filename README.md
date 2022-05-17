@@ -1,17 +1,22 @@
 # rn_login_demo
 
-### Demo a SignIn / Login / Profile screen
+### Demo a SignIn / Login / Profile screen 
 
-1 - Setup Initial Source
-2 - Setup Assets
-3 - Make the Views
+1 - Setup Initial Source 
+
+2 - Setup Assets 
+
+3 - Make the Views 
+
 4 - Do the logic on Frontend
-5 - Integrate API
-6 - Testing
-7 - Refactor code
-8 - Delivering
 
-### VIDEO:
+5 - Integrate API 
+
+6 - Testing
+
+7 - Refactor code
+
+8 - Delivering 
 
 https://drive.google.com/drive/folders/1JQHCJLCaM4cInpaheW-7s5do7dAWxqlh?usp=sharing
 
@@ -21,7 +26,6 @@ https://drive.google.com/drive/folders/1JQHCJLCaM4cInpaheW-7s5do7dAWxqlh?usp=sha
 yarn install
 cd ios && pod install
 ```
-
 ### B - RUN SOURCE
 
 yarn ios
