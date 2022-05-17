@@ -1,5 +1,6 @@
 export const palette = {
   white: "#ffffff",
+  lighterGrey: "#CDD4DA",
   oranish: "rgb(250,119,69)",
   maize: "rgb(243,196,66)",
   greyishBrown: "rgb(67,67,67)",

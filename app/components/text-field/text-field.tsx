@@ -86,6 +86,7 @@ export function TextField(props: TextFieldProps) {
         placeholder={placeholder}
         placeholderTextColor={color.palette.lighterGrey}
         underlineColorAndroid={color.transparent}
+        autoCapitalize="none"
         {...rest}
         style={inputStyles}
         ref={forwardedRef}
